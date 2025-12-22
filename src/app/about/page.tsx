@@ -3,7 +3,7 @@
 import { useContent } from '@/context/ContentContext';
 
 export default function AboutPage() {
-  const { aboutSection, pageBackgrounds } = useContent();
+  const { about, pageBackgrounds } = useContent();
 
   return (
     <div 
@@ -28,7 +28,7 @@ export default function AboutPage() {
           <div className="p-12">
             <div className="prose prose-lg max-w-none">
               <p className="text-gray-700 leading-relaxed text-xl whitespace-pre-wrap font-serif">
-                {aboutSection.content || 'Welcome to Shri Sadguru Pundalingeshwar Temple. Our temple is a sacred space where devotees come to seek blessings and find spiritual peace.'}
+                {about.content || 'Welcome to Shri Sadguru Pundalingeshwar Temple. Our temple is a sacred space where devotees come to seek blessings and find spiritual peace.'}
               </p>
             </div>
           </div>

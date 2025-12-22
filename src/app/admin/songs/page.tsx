@@ -65,6 +65,7 @@ export default function ManageSongsPage() {
             id: Date.now().toString(),
             fileData: fileData,
             fileName: file.name,
+            coverImage: '', // No cover image for now
             uploadedAt: new Date().toLocaleDateString('en-US', {
               year: 'numeric',
               month: 'long',

@@ -2,7 +2,7 @@
 
 import { useContent } from '@/context/ContentContext';
 import { useState } from 'react';
-import AdminProtected from '@/components/AdminProtected';
+import { AdminProtected } from '@/components/AdminProtected';
 
 export default function BannerSettingsPage() {
   const { bannerSettings, updateBannerLogo } = useContent();

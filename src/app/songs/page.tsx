@@ -66,22 +66,22 @@ export default function SongsPage() {
                     <h3 className="font-serif font-bold text-pink-900 text-lg mb-4 line-clamp-2 min-h-[3.5rem] group-hover:text-orange-700 transition-colors">
                       {song.fileName}
                     </h3>
-                    {song.audioData && (
+                    {song.fileData && (
                       <audio
                         controls
                         className="w-full"
                         onPlay={() => setPlayingSong(song.id)}
                         onPause={() => setPlayingSong(null)}
                       >
-                        <source src={song.audioData} type="audio/mpeg" />
+                        <source src={song.fileData} type="audio/mpeg" />
                         Your browser does not support the audio element.
                       </audio>
                     )}
                     <div className="mt-4 flex items-center justify-between">
                       <span className="text-sm text-pink-600 font-semibold">Audio</span>
-                      {song.audioData && (
+                      {song.fileData && (
                         <a
-                          href={song.audioData}
+                          href={song.fileData}
                           download={song.fileName}
                           className="bg-gradient-to-r from-pink-500 to-orange-600 text-white px-5 py-2 rounded-full text-sm font-bold hover:from-pink-600 hover:to-orange-700 transition-all shadow-md"
                         >
