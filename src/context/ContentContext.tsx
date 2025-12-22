@@ -103,6 +103,8 @@ export interface PageBackgrounds {
 
 export interface BannerSettings {
   logo: string; // base64 image data for banner logo
+  image: string; // base64 image data for banner background
+  text: string; // banner text
 }
 
 interface ContentContextType {
@@ -118,6 +120,8 @@ interface ContentContextType {
   updatePageBackground: (page: keyof PageBackgrounds, imageData: string) => void;
   bannerSettings: BannerSettings;
   updateBannerLogo: (imageData: string) => void;
+  updateBannerImage: (imageData: string) => void;
+  updateBannerText: (text: string) => void;
   books: Book[];
   addBook: (book: Book) => void;
   deleteBook: (id: string) => void;
@@ -207,6 +211,8 @@ const defaultPageBackgrounds: PageBackgrounds = {
 
 const defaultBannerSettings: BannerSettings = {
   logo: '',
+  image: '',
+  text: '',
 };
 
 export function ContentProvider({ children }: { children: React.ReactNode }) {
@@ -214,7 +220,7 @@ export function ContentProvider({ children }: { children: React.ReactNode }) {
   const [heroPhotos, setHeroPhotos] = useState<HeroPhoto[]>([]);
   const [sectionBackgrounds, setSectionBackgrounds] = useState<SectionBackgrounds>(defaultSectionBackgrounds);
   const [pageBackgrounds, setPageBackgrounds] = useState<PageBackgrounds>(defaultPageBackgrounds);
-  const [bannerSettings, setBannerSettings] = useState<BannerSettings>(defaultBannerSettings);
+  const [bannerSettings, setBannerSettings] = useState<BannerSettings>({ logo: '', image: '', text: '' });
   const [books, setBooks] = useState<Book[]>([]);
   const [songs, setSongs] = useState<Song[]>([]);
   const [contactInfo, setContactInfo] = useState<ContactInfo>(defaultContactInfo);
@@ -227,6 +233,12 @@ export function ContentProvider({ children }: { children: React.ReactNode }) {
   const [isLoaded, setIsLoaded] = useState(false);
 
   // Load from server on mount
+  const updateBannerImage = (imageData: string) => {
+    setBannerSettings((prev) => ({ ...prev, image: imageData }));
+  };
+  const updateBannerText = (text: string) => {
+    setBannerSettings((prev) => ({ ...prev, text }));
+  };
   useEffect(() => {
     const loadData = async () => {
       // Load photos from server
@@ -237,7 +249,7 @@ export function ContentProvider({ children }: { children: React.ReactNode }) {
           // Convert server response to Photo format
           const photosData = serverPhotos.map((p: any) => ({
             id: p.id,
-            imageData: p.imageUrl,
+            imageData: p.imageData || p.imageUrl, // Handle both dev and prod responses
             caption: p.caption,
             uploadedAt: p.uploadedAt,
           }));
@@ -469,11 +481,14 @@ export function ContentProvider({ children }: { children: React.ReactNode }) {
   };
 
   const updateBannerLogo = (imageData: string) => {
-    setBannerSettings({ logo: imageData });
+    setBannerSettings(prev => ({
+      ...prev,
+      logo: imageData
+    }));
   };
 
   return (
-    <ContentContext.Provider value={{ photos, addPhoto, deletePhoto, heroPhotos, addHeroPhoto, deleteHeroPhoto, sectionBackgrounds, updateSectionBackground, pageBackgrounds, updatePageBackground, bannerSettings, updateBannerLogo, books, addBook, deleteBook, songs, addSong, deleteSong, contactInfo, updateContactInfo, templeHistory, updateTempleHistory, about, updateAbout, timings, updateTimings, timingsSection, updateTimingsSection, sevaSection, updateSevaSection, templeBoxes, updateTempleBoxes }}>
+    <ContentContext.Provider value={{ photos, addPhoto, deletePhoto, heroPhotos, addHeroPhoto, deleteHeroPhoto, sectionBackgrounds, updateSectionBackground, pageBackgrounds, updatePageBackground, bannerSettings, updateBannerLogo, updateBannerImage, updateBannerText, books, addBook, deleteBook, songs, addSong, deleteSong, contactInfo, updateContactInfo, templeHistory, updateTempleHistory, about, updateAbout, timings, updateTimings, timingsSection, updateTimingsSection, sevaSection, updateSevaSection, templeBoxes, updateTempleBoxes }}>
       {children}
     </ContentContext.Provider>
   );

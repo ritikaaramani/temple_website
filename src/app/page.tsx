@@ -4,7 +4,7 @@ import { useContent } from '@/context/ContentContext';
 import { useState, useEffect, useRef } from 'react';
 
 export default function Home() {
-  const { contactInfo, templeHistory, about, timings, sevaSection, templeBoxes, books, songs, photos, heroPhotos, sectionBackgrounds } = useContent();
+  const { contactInfo, templeHistory, about, timings, sevaSection, templeBoxes, books, songs, photos, heroPhotos, sectionBackgrounds, bannerSettings } = useContent();
   const [currentHeroIndex, setCurrentHeroIndex] = useState(0);
   const [currentBoxIndex, setCurrentBoxIndex] = useState(0);
   const [selectedPhoto, setSelectedPhoto] = useState<any>(null);
@@ -51,84 +51,54 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-orange-50 via-yellow-50 to-orange-50">
-      {/* Hero Section with Background Photo */}
-      {heroPhotos.length > 0 ? (
-        <section 
-          className="relative text-white py-40 text-center overflow-hidden w-full min-h-[600px] flex items-center justify-center"
-          style={{
-            backgroundImage: `url('${heroPhotos[currentHeroIndex].imageData}')`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundAttachment: 'fixed',
-          }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/70"></div>
-
-          <div className="relative z-10 max-w-5xl mx-auto px-4">
-            <h1 className="text-7xl font-serif font-bold mb-6 tracking-wide drop-shadow-2xl animate-fadeIn">
-              Shri Sadguru Pundalingeshwar Temple
-            </h1>
-            <p className="text-4xl font-serif font-light text-white/95 drop-shadow-lg mb-8 animate-slideIn">
-              Divine Seva & Worship Portal
-            </p>
-            <div className="flex justify-center gap-4 mt-8">
-              <a href="#about" className="bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white border-2 border-white px-8 py-4 rounded-lg font-bold text-lg transition-all transform hover:scale-105">
-                Learn More
-              </a>
-            </div>
-          </div>
-
-          {heroPhotos.length > 1 && (
-            <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 flex justify-center gap-3">
-              {heroPhotos.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setCurrentHeroIndex(index)}
-                  className={`h-3 rounded-full transition-all ${
-                    index === currentHeroIndex
-                      ? 'bg-white w-8'
-                      : 'bg-white/50 w-3 hover:bg-white/75'
-                  }`}
-                />
-              ))}
-            </div>
+      {/* Hero Banner Section - covers full viewport below header */}
+      <section
+        className="relative text-white text-center overflow-hidden w-full min-h-[calc(100vh-64px)] flex items-center justify-center pt-0"
+        style={heroPhotos.length > 0 ? {
+          backgroundImage: `url('${heroPhotos[currentHeroIndex].imageData}')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundAttachment: 'fixed',
+        } : {
+          background: 'linear-gradient(to bottom, #b45309, #f59e0b, #fff7ed)'
+        }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/70"></div>
+        <div className="relative z-10 max-w-5xl mx-auto px-4 flex flex-col items-center justify-center">
+          {bannerSettings.logo && (
+            <img src={bannerSettings.logo} alt="Banner Logo" className="h-24 w-auto mx-auto mb-6 drop-shadow-2xl" />
           )}
-        </section>
-      ) : (
-        <section className="bg-gradient-to-b from-amber-900 via-orange-700 to-orange-600 text-white py-40 text-center w-full min-h-[600px] flex items-center justify-center">
-          <div className="max-w-5xl mx-auto px-4">
-            <h1 className="text-7xl font-serif font-bold mb-6 tracking-wide animate-fadeIn">
-              Shri Sadguru Pundalingeshwar Temple
-            </h1>
-            <p className="text-4xl font-serif font-light mb-8 animate-slideIn">Divine Seva & Worship Portal</p>
-            <div className="flex justify-center gap-4 mt-8">
-              <a href="#about" className="bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white border-2 border-white px-8 py-4 rounded-lg font-bold text-lg transition-all transform hover:scale-105">
-                Learn More
-              </a>
-            </div>
+          <h1 className="text-7xl font-serif font-bold mb-6 tracking-wide drop-shadow-2xl animate-fadeIn">
+            {bannerSettings.text || 'Shri Sadguru Pundalingeshwar Temple'}
+          </h1>
+          <p className="text-4xl font-serif font-light text-white/95 drop-shadow-lg mb-8 animate-slideIn">
+            Divine Seva & Worship Portal
+          </p>
+          <div className="flex justify-center gap-4 mt-8">
+            <a href="#about" className="bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white border-2 border-white px-8 py-4 rounded-lg font-bold text-lg transition-all transform hover:scale-105">
+              Learn More
+            </a>
           </div>
-        </section>
-      )}
+        </div>
+      </section>
 
       {/* About Section - FIRST */}
       <section 
         id="about" 
-        className={`scroll-section relative py-20 px-4 overflow-hidden transition-all duration-1000 ${
-          visibleSections.has('about') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-        }`}
-        style={sectionBackgrounds.aboutBg ? {
-          backgroundImage: `url('${sectionBackgrounds.aboutBg}')`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundAttachment: 'fixed',
-        } : undefined}
+        className="scroll-section relative py-20 px-4 overflow-hidden"
+        style={{
+          opacity: visibleSections.has('about') ? 1 : 0,
+          transition: 'opacity 1s ease-out',
+          ...(sectionBackgrounds.aboutBg ? {
+            backgroundImage: `url('${sectionBackgrounds.aboutBg}')`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundAttachment: 'fixed',
+          } : {})
+        }}
       >
-        {sectionBackgrounds.aboutBg && (
-          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/60"></div>
-        )}
-        {!sectionBackgrounds.aboutBg && (
-          <div className="absolute inset-0 bg-gradient-to-b from-orange-50 to-white"></div>
-        )}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/60 z-0" style={{ display: sectionBackgrounds.aboutBg ? 'block' : 'none' }}></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-orange-50 to-white z-0" style={{ display: !sectionBackgrounds.aboutBg ? 'block' : 'none' }}></div>
         
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="text-center mb-12">
@@ -207,15 +177,17 @@ export default function Home() {
       {/* Temple Timings Section */}
       <section 
         id="timings" 
-        className={`scroll-section relative py-20 px-4 overflow-hidden transition-all duration-1000 ${
-          visibleSections.has('timings') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-        }`}
-        style={sectionBackgrounds.timingsBg ? {
-          backgroundImage: `url('${sectionBackgrounds.timingsBg}')`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundAttachment: 'fixed',
-        } : undefined}
+        className="scroll-section relative py-20 px-4 overflow-hidden"
+        style={{
+          opacity: visibleSections.has('timings') ? 1 : 0,
+          transition: 'opacity 1s ease-out',
+          ...(sectionBackgrounds.timingsBg ? {
+            backgroundImage: `url('${sectionBackgrounds.timingsBg}')`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundAttachment: 'fixed',
+          } : {})
+        }}
       >
         {sectionBackgrounds.timingsBg && (
           <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/70"></div>
@@ -242,15 +214,17 @@ export default function Home() {
       {/* Sevas Section */}
       <section 
         id="sevas" 
-        className={`scroll-section relative py-20 px-4 overflow-hidden transition-all duration-1000 ${
-          visibleSections.has('sevas') ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-        }`}
-        style={sectionBackgrounds.sevasBg ? {
-          backgroundImage: `url('${sectionBackgrounds.sevasBg}')`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundAttachment: 'fixed',
-        } : undefined}
+        className="scroll-section relative py-20 px-4 overflow-hidden"
+        style={{
+          opacity: visibleSections.has('sevas') ? 1 : 0,
+          transition: 'opacity 1s ease-out',
+          ...(sectionBackgrounds.sevasBg ? {
+            backgroundImage: `url('${sectionBackgrounds.sevasBg}')`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundAttachment: 'fixed',
+          } : {})
+        }}
       >
         {sectionBackgrounds.sevasBg && (
           <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/70"></div>
@@ -312,9 +286,7 @@ export default function Home() {
 
       {/* Gallery Preview Section */}
       <section 
-        className={`relative py-24 px-4 overflow-hidden ${
-          !sectionBackgrounds.galleryBg ? 'bg-gradient-to-br from-orange-50 via-white to-yellow-50' : ''
-        }`}
+        className="relative py-24 px-4 overflow-hidden"
         style={sectionBackgrounds.galleryBg ? {
           backgroundImage: `url(${sectionBackgrounds.galleryBg})`,
           backgroundSize: 'cover',
@@ -407,15 +379,15 @@ export default function Home() {
 
       {/* Books Preview Section */}
       <section 
-        className={`relative py-24 px-4 overflow-hidden ${
-          !sectionBackgrounds.booksBg ? 'bg-gradient-to-br from-amber-50 via-orange-50 to-white' : ''
-        }`}
+        className="relative py-24 px-4 overflow-hidden"
         style={sectionBackgrounds.booksBg ? {
           backgroundImage: `url(${sectionBackgrounds.booksBg})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundAttachment: 'fixed',
-        } : undefined}
+        } : {
+          background: 'linear-gradient(to bottom right, #fef3c7, #fed7aa, #ffffff)'
+        }}
       >
         {sectionBackgrounds.booksBg && (
           <div className="absolute inset-0 bg-black/60"></div>
@@ -515,15 +487,15 @@ export default function Home() {
 
       {/* Songs Preview Section */}
       <section 
-        className={`relative py-24 px-4 overflow-hidden ${
-          !sectionBackgrounds.songsBg ? 'bg-gradient-to-br from-pink-50 via-orange-50 to-white' : ''
-        }`}
+        className="relative py-24 px-4 overflow-hidden"
         style={sectionBackgrounds.songsBg ? {
           backgroundImage: `url(${sectionBackgrounds.songsBg})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundAttachment: 'fixed',
-        } : undefined}
+        } : {
+          background: 'linear-gradient(to bottom right, #fce7f3, #fed7aa, #ffffff)'
+        }}
       >
         {sectionBackgrounds.songsBg && (
           <div className="absolute inset-0 bg-black/60"></div>

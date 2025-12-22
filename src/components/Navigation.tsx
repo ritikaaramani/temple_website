@@ -29,8 +29,16 @@ export function Navigation() {
 
   return (
     <>
-      <nav className="bg-gradient-to-r from-amber-900 to-amber-800 text-white shadow-lg sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 py-3">
+      <nav
+        className="relative text-white shadow-lg sticky top-0 z-50"
+        style={bannerSettings.image ? {
+          backgroundImage: `url('${bannerSettings.image}')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        } : {}}
+      >
+        <div className="absolute inset-0 bg-gradient-to-r from-amber-900 to-amber-800 opacity-90"></div>
+        <div className="max-w-7xl mx-auto px-4 py-3 relative z-10">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-4">
               <button
@@ -47,12 +55,12 @@ export function Navigation() {
                     className="h-12 w-auto object-contain"
                   />
                   <span className="text-xl md:text-2xl font-bold tracking-wide hidden sm:inline">
-                    Shri Sadguru Pundalingeshwar Temple
+                    {bannerSettings.text || 'Shri Sadguru Pundalingeshwar Temple'}
                   </span>
                 </Link>
               ) : (
                 <Link href="/" className="text-xl md:text-2xl font-bold tracking-wide hover:text-yellow-300 transition">
-                  Shri Sadguru Pundalingeshwar Temple
+                  {bannerSettings.text || 'Shri Sadguru Pundalingeshwar Temple'}
                 </Link>
               )}
             </div>
